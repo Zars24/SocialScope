@@ -384,18 +384,6 @@ Roadmap status is reviewed whenever provider terms or capabilities change.
 
 ---
 
-## Documentation
-
-- [`docs/FEASIBILITY_RESEARCH.md`](docs/FEASIBILITY_RESEARCH.md) — evidence, status labels, and source URLs
-- [`docs/PRODUCT_FLOW_AND_PRIVACY.md`](docs/PRODUCT_FLOW_AND_PRIVACY.md) — product flow, validation rules, and privacy model
-- [`docs/STORY_VIEWER_FEASIBILITY.md`](docs/STORY_VIEWER_FEASIBILITY.md) — Story-provider feasibility
-- [`docs/STORY_VIEWER_DEEP_RESEARCH.md`](docs/STORY_VIEWER_DEEP_RESEARCH.md) — deeper provider and media research
-- [`docs/INSTAGRAM_PROVIDER_VALIDATION.md`](docs/INSTAGRAM_PROVIDER_VALIDATION.md) — Instagram provider validation and open compliance questions
-- [`PROJECT_SPEC.md`](PROJECT_SPEC.md) — product scope
-- [`TECHNICAL_DECISIONS.md`](TECHNICAL_DECISIONS.md) — architecture and security decisions
-
----
-
 ## Testing
 
 ```powershell
