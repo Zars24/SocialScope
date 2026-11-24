@@ -1,0 +1,136 @@
+{% import "macros.html" as m %}
+
+<section class="section result" id="result" data-result>
+  <div class="shell">
+    <div class="result-head" data-reveal>
+      <div class="result-identity">
+        <p class="kicker">{{ t('result.kicker') }}</p>
+        <h2 class="result-title">
+          <span>{% if result.resource.username %}@{{ result.resource.username }}{% else %}{{ t('result.content') }}{% endif %}</span>
+          <span class="result-kind">{{ t('cap.label.' ~ result.resource.kind) }}</span>
+        </h2>
+        <p class="result-meta">
+          <span>{{ result.resource.platform_label }}</span>
+          <span class="dot-sep" aria-hidden="true">·</span>
+          <span>{{ t('result.fetched') }} {{ result.fetched_at_iso|clock_time }}</span>
+          <span class="dot-sep" aria-hidden="true">·</span>
+          <code class="canonical">{{ result.resource.canonical_url }}</code>
+        </p>
+      </div>
+      <div class="badges">
+        {{ m.mode_badge(result.mode, t) }}
+        <span class="badge badge--source">{{ t(result.source_label) }}</span>
+      </div>
+    </div>
+
+    <div class="result-grid">
+      <div class="stage" data-reveal>
+        {% set has_story = result.story and result.story.items %}
+        {% if has_story and result.embed %}
+        <div class="tabs" data-tabs role="tablist" aria-label="{{ t('result.tabs') }}">
+          <button class="tab is-active" type="button" role="tab" aria-selected="true" data-tab="story">
+            {{ t('result.tab.story') }} <span class="tab-count">{{ result.story.count }}</span>
+          </button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-tab="embed">
+            {{ t('cap.label.' ~ result.resource.kind) }} {{ t('result.tab.embed') }}
+          </button>
+        </div>
+        {% endif %}
+
+        {% if has_story %}
+        <div class="panel-block-wrap is-active" data-panel="story">
+          {% include "partials/story.html" %}
+        </div>
+        {% endif %}
+
+        {% if result.embed %}
+        <div class="panel-block-wrap{% if not has_story %} is-active{% endif %}" data-panel="embed">
+          <div class="embed-block">
+            <div class="block-label">
+              <span class="mode-chip mode-chip--embed">{{ t('mode.embed') }}</span>
+              <span>{{ result.embed.source_label }}</span>
+            </div>
+            <div class="embed-frame {{ 'is-portrait' if result.embed.kind in ['profile', 'video', 'photo'] else 'is-post' }}">
+              <iframe
+                src="{{ result.embed.url }}"
+                title="{{ result.embed.title }}"
+                loading="lazy"
+                allow="encrypted-media; fullscreen; picture-in-picture"
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+            <p class="fine">
+              {{ t(result.embed.note) }}
+              <a href="{{ result.embed.open_url }}" target="_blank" rel="noopener noreferrer nofollow">{{ t('result.open') }} {{ result.resource.platform_label }}</a>
+            </p>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if not has_story and not result.embed %}
+        <div class="empty-stage">
+          <span class="empty-mark" aria-hidden="true">∅</span>
+          <h3>{{ t('result.empty.title') }}</h3>
+          <p>{{ t(result.story_message) if result.story_message else t('result.empty.source') }} {{ t('result.empty.body') }}</p>
+          <div class="empty-actions">
+            {{ m.retry_form(form_action|default('/analyze'), result.resource.canonical_url, t) }}
+            <a class="btn btn--small btn--ghost" href="{{ result.resource.canonical_url }}" target="_blank" rel="noopener noreferrer nofollow">{{ t('result.open') }} {{ result.resource.platform_label }}</a>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <aside class="panel" aria-label="{{ t('result.panel') }}" data-reveal>
+        {% if result.story_state %}
+        <div class="status-box status-box--{{ result.story_state }}">
+          <div class="status-box-head">
+            <span class="status-indicator" aria-hidden="true"></span>
+            <strong>{{ t('result.state.' ~ result.story_state) }}</strong>
+          </div>
+          {% if result.story_message %}<p>{{ t(result.story_message) }}</p>{% endif %}
+          {% if result.story %}
+          <p class="fine">{{ result.story.count }} {{ t('result.items') }} · {{ result.story.fetched_at_iso|clock_time }}</p>
+          {% endif %}
+          {% if result.story_state in ['empty', 'error', 'unavailable'] %}
+            {{ m.retry_form(form_action|default('/analyze'), result.resource.canonical_url, t) }}
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="panel-block">
+          <h3>{{ result.resource.platform_label }} · {{ t('result.caps') }}</h3>
+          <ul class="cap-list">
+            {% for cap in result.capabilities %}
+            <li class="cap-row">
+              <div class="cap-row-head">
+                <span>{{ t('cap.label.' ~ cap.key) }}</span>
+                {{ m.status_pill(cap, t) }}
+              </div>
+              <details>
+                <summary>{{ t('result.detail') }}</summary>
+                <p>{{ t(cap.explanation) }}</p>
+                {% if cap.mode %}
+                <p class="fine">{{ t('result.mode') }}: {{ t('mode.' ~ cap.mode) }} · {{ t('result.method') }}: {{ cap.method or '—' }}</p>
+                {% endif %}
+              </details>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="panel-block">
+          <h3>{{ t('result.notes') }}</h3>
+          <ul class="notice-list">
+            {% for notice in result.notices %}
+            <li>{{ t(notice) }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+
+        <div class="panel-actions">
+          <a class="btn btn--small btn--ghost" href="{{ result.resource.canonical_url }}" target="_blank" rel="noopener noreferrer nofollow">{{ t('result.open') }} {{ result.resource.platform_label }}</a>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>

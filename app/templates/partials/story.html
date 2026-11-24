@@ -1,0 +1,139 @@
+{% set bundle = result.story %}
+<div class="story-block" data-story>
+  <div class="block-label">
+    <span class="mode-chip mode-chip--structured">{{ t('mode.structured') }}</span>
+    <span>{{ bundle.source_label }}</span>
+    <span class="block-count">{{ bundle.count }} {{ t('result.items') }}</span>
+  </div>
+
+  <div class="story-shell" tabindex="0" role="region" aria-label="{{ t('player.region') }} @{{ bundle.username }}" data-story-player>
+    <div class="story-frame">
+      <div class="story-progress" aria-hidden="true">
+        {% for item in bundle.items %}
+        <span class="story-seg"><span class="story-seg-fill"></span></span>
+        {% endfor %}
+      </div>
+
+      <div class="story-head">
+        <span class="story-avatar" aria-hidden="true">
+          {% if bundle.avatar_url %}
+          <img src="{{ bundle.avatar_url }}" alt="" width="34" height="34" loading="lazy" referrerpolicy="no-referrer">
+          {% else %}
+          <span>{{ bundle.username[0]|upper }}</span>
+          {% endif %}
+        </span>
+        <span class="story-who">
+          <strong>{{ bundle.display_name or bundle.username }}</strong>
+          <span>@{{ bundle.username }} · <span data-story-time>{{ bundle.items[0].taken_at_iso|relative_time }}</span></span>
+        </span>
+        <button class="story-ctrl" type="button" data-story-pause aria-label="{{ t('player.pause') }}"
+                data-label-pause="{{ t('player.pause') }}" data-label-play="{{ t('player.play') }}" aria-pressed="false">
+          <svg class="icon-pause" viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <rect x="5" y="4" width="3.4" height="12" rx="1"></rect>
+            <rect x="11.6" y="4" width="3.4" height="12" rx="1"></rect>
+          </svg>
+          <svg class="icon-play" viewBox="0 0 20 20" width="16" height="16" fill="currentColor" aria-hidden="true">
+            <path d="M6 4.2c0-.8.9-1.3 1.6-.9l8 5.8c.6.4.6 1.4 0 1.8l-8 5.8c-.7.4-1.6-.1-1.6-.9V4.2Z"></path>
+          </svg>
+        </button>
+        <button class="story-ctrl" type="button" data-story-mute aria-label="{{ t('player.unmute') }}"
+                data-label-muted="{{ t('player.unmute') }}" data-label-sound="{{ t('player.mute') }}" aria-pressed="false">
+          <svg class="icon-sound" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M4 8v4h3l4 3.2V4.8L7 8H4Z" fill="currentColor" stroke="none"></path>
+            <path d="M13.4 7.4a3.6 3.6 0 0 1 0 5.2M15.6 5.2a6.8 6.8 0 0 1 0 9.6"></path>
+          </svg>
+          <svg class="icon-muted" viewBox="0 0 20 20" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <path d="M4 8v4h3l4 3.2V4.8L7 8H4Z" fill="currentColor" stroke="none"></path>
+            <path d="m13.4 8.2 4 3.6M17.4 8.2l-4 3.6"></path>
+          </svg>
+        </button>
+      </div>
+
+      <div class="story-viewport">
+        {% for item in bundle.items %}
+        <figure
+          class="story-slide{% if loop.first %} is-active{% endif %}"
+          data-story-slide
+          data-type="{{ item.media_type }}"
+          data-type-label="{{ t('player.video') if item.media_type == 'video' else t('player.photo') }}"
+          data-duration="{{ item.duration or 5 }}"
+          data-duration-text="{{ item.duration|duration }}"
+          data-media="{{ item.media_url }}"
+          data-taken="{{ item.taken_at_iso|relative_time }}"
+          data-permalink="{{ item.permalink or result.resource.canonical_url }}"
+          aria-hidden="{{ 'false' if loop.first else 'true' }}"
+        >
+          {% if item.media_type == 'video' %}
+          <video
+            class="story-media"
+            src="{{ item.media_url }}"
+            {% if item.thumbnail_url %}poster="{{ item.thumbnail_url }}"{% endif %}
+            playsinline
+            muted
+            preload="metadata"
+            data-story-video
+          ></video>
+          {% else %}
+          <img
+            class="story-media"
+            src="{{ item.media_url }}"
+            alt="{{ t('player.item') }} {{ loop.index }} — @{{ bundle.username }}"
+            loading="{{ 'eager' if loop.first else 'lazy' }}"
+            decoding="async"
+            referrerpolicy="no-referrer"
+          >
+          {% endif %}
+        </figure>
+        {% endfor %}
+
+        <button class="story-tap story-tap--prev" type="button" data-story-prev aria-label="{{ t('player.prev') }}"></button>
+        <button class="story-tap story-tap--next" type="button" data-story-next aria-label="{{ t('player.next') }}"></button>
+
+        <div class="story-foot">
+          <div class="story-detail">
+            <span data-story-detail-type>{{ t('player.video') if bundle.items[0].media_type == 'video' else t('player.photo') }}</span>
+            <span class="story-dot" aria-hidden="true">·</span>
+            <span data-story-detail-time>{{ bundle.items[0].taken_at_iso|relative_time }}</span>
+            <span class="story-dot" data-story-detail-dur-dot aria-hidden="true"{% if bundle.items[0].media_type != 'video' %} hidden{% endif %}>·</span>
+            <span data-story-detail-dur{% if bundle.items[0].media_type != 'video' %} hidden{% endif %}>{{ bundle.items[0].duration|duration }}</span>
+            <a class="story-media-link" href="{{ bundle.items[0].media_url }}" target="_blank" rel="noopener noreferrer nofollow"
+               data-story-media title="{{ t('player.open_media.hint') }}">{{ t('player.open_media') }}</a>
+          </div>
+          <div class="story-foot-row">
+            <span data-story-caption aria-live="polite" data-template="{{ t('player.item') }} {n} / {{ bundle.count }}">{{ t('player.item') }} 1 / {{ bundle.count }}</span>
+            <a href="{{ bundle.items[0].permalink or result.resource.canonical_url }}" target="_blank" rel="noopener noreferrer nofollow" data-story-link>{{ t('player.open') }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="story-meta">
+      <div class="thumbs" aria-label="{{ t('player.select') }}">
+        {% for item in bundle.items %}
+        <button
+          class="thumb{% if loop.first %} is-active{% endif %}"
+          type="button"
+          data-story-goto="{{ loop.index0 }}"
+          aria-label="{{ t('player.item') }} {{ loop.index }} {{ t('player.of') }} {{ bundle.count }}"
+          aria-pressed="{{ 'true' if loop.first else 'false' }}"
+        >
+          {% if item.thumbnail_url %}
+          <img src="{{ item.thumbnail_url }}" alt="" loading="lazy" referrerpolicy="no-referrer">
+          {% else %}
+          <span class="thumb-fallback">{{ 'VID' if item.media_type == 'video' else 'IMG' }}</span>
+          {% endif %}
+          <span class="thumb-index">{{ loop.index }}</span>
+          <span class="thumb-type">{{ t('player.video') if item.media_type == 'video' else t('player.photo') }}</span>
+        </button>
+        {% endfor %}
+      </div>
+
+      <dl class="meta-list meta-list--tight">
+        <div><dt>{{ t('player.provider') }}</dt><dd>{{ bundle.provider_name }}</dd></div>
+        <div><dt>{{ t('player.fetched') }}</dt><dd>{{ bundle.fetched_at_iso|clock_time }}</dd></div>
+        <div><dt>{{ t('player.media') }}</dt><dd>{{ t('meta.browser') }}</dd></div>
+      </dl>
+      <p class="fine">{{ t('player.fine') }}</p>
+    </div>
+  </div>
+</div>

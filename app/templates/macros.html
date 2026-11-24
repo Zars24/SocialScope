@@ -1,0 +1,69 @@
+{% macro status_pill(cap, t) -%}
+  <span class="pill pill--{{ cap.status }}">
+    <span class="pill-dot" aria-hidden="true"></span>{{ t('pill.' ~ cap.status) }}
+  </span>
+{%- endmacro %}
+
+{% macro mode_badge(mode, t) -%}
+  <span class="badge badge--mode badge--{{ mode }}">{{ t('mode.' ~ mode) }}</span>
+{%- endmacro %}
+
+{% macro error_box(error, t) -%}
+  {% if error %}
+  <div class="alert alert--error" role="alert" data-error>
+    <span class="alert-icon" aria-hidden="true">!</span>
+    <div class="alert-body">
+      <p class="alert-title">{{ t(error.message) }}</p>
+      {% if error.hint %}<p class="alert-hint">{{ t(error.hint) }}</p>{% endif %}
+      <p class="alert-code">{{ t('form.code') }} {{ error.code }}</p>
+    </div>
+  </div>
+  {% endif %}
+{%- endmacro %}
+
+{% macro analyzer_form(action, raw_url, error, t, id_prefix='hero', help_key='form.help') -%}
+<form class="analyzer" method="post" action="{{ action }}" data-analyzer novalidate>
+  <div class="field-head">
+    <label class="field-label" for="{{ id_prefix }}-url">{{ t('form.label') }}</label>
+    <span class="field-detect" data-platform aria-live="polite"></span>
+  </div>
+  <div class="field-row">
+    <span class="field-icon" aria-hidden="true">
+      <svg viewBox="0 0 20 20" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M8.2 11.8a3.4 3.4 0 0 0 4.8 0l2.6-2.6a3.4 3.4 0 1 0-4.8-4.8L9.5 5.7"/>
+        <path d="M11.8 8.2a3.4 3.4 0 0 0-4.8 0L4.4 10.8a3.4 3.4 0 1 0 4.8 4.8l1.3-1.3"/>
+      </svg>
+    </span>
+    <input
+      class="url-input"
+      id="{{ id_prefix }}-url"
+      name="url"
+      type="text"
+      inputmode="url"
+      autocomplete="off"
+      autocapitalize="off"
+      spellcheck="false"
+      maxlength="2048"
+      enterkeyhint="go"
+      placeholder="{{ t('form.placeholder') }}"
+      value="{{ raw_url }}"
+      required
+      data-analyzer-input
+      aria-describedby="{{ id_prefix }}-help"
+    >
+    <button class="btn btn--primary" type="submit" data-submit>
+      <span class="btn-label" data-label-default="{{ t('form.submit') }}" data-label-busy="{{ t('loader.analyzing') }}">{{ t('form.submit') }}</span>
+      <span class="btn-spinner" aria-hidden="true"></span>
+    </button>
+  </div>
+  <p class="field-help" id="{{ id_prefix }}-help">{{ t(help_key) }}</p>
+</form>
+{{ error_box(error, t) }}
+{%- endmacro %}
+
+{% macro retry_form(action, url, t) -%}
+<form class="retry" method="post" action="{{ action }}">
+  <input type="hidden" name="url" value="{{ url }}">
+  <button class="btn btn--small btn--ghost" type="submit">{{ t('result.retry') }}</button>
+</form>
+{%- endmacro %}

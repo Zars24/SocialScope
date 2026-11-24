@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('page.title.error') }}{% endblock %}
+{% block robots %}noindex, follow{% endblock %}
+
+{% block content %}
+<section class="page-head page-head--error">
+  <div class="shell narrow">
+    <p class="kicker">{{ t('error.title') }}</p>
+    <h1>{{ t(error.message) }}</h1>
+    {% if error.hint %}<p class="lede">{{ t(error.hint) }}</p>{% endif %}
+    <p class="error-code">{{ t('error.code') }} <code>{{ error.code }}</code></p>
+    <div class="empty-actions">
+      <a class="btn btn--primary" href="/">{{ t('error.home') }}</a>
+      <a class="btn btn--ghost" href="/story">{{ t('error.story') }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="section section--flush">
+  <div class="shell narrow prose">
+    <h2>{{ t('error.tips.title') }}</h2>
+    <ul class="check-list">
+      <li>{{ t('error.tips.1') }}</li>
+      <li>{{ t('error.tips.2') }}</li>
+      <li>{{ t('error.tips.3') }}</li>
+      <li>{{ t('error.tips.4') }}</li>
+    </ul>
+    <p class="fine">{{ t('error.fine') }}</p>
+  </div>
+</section>
+{% endblock %}

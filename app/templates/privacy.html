@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('page.title.privacy') }}{% endblock %}
+{% block description %}{{ t('page.desc.privacy') }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="shell narrow">
+    <p class="kicker" data-reveal>{{ t('privacy.kicker') }}</p>
+    <h1 data-reveal>{{ t('privacy.title1') }}<br><span class="accent">{{ t('privacy.title2') }}</span></h1>
+    <p class="lede" data-reveal>{{ t('privacy.lede') }}</p>
+  </div>
+</section>
+
+<section class="section section--flush">
+  <div class="shell narrow prose">
+    <h2>{{ t('privacy.claims.title') }}</h2>
+    <div class="claim-grid" data-stagger>
+      <article class="claim">
+        <span class="claim-tag">{{ t('privacy.claim.1.tag') }}</span>
+        <h3>{{ t('privacy.claim.1.title') }}</h3>
+        <p>{{ t('privacy.claim.1.body') }}</p>
+      </article>
+      <article class="claim">
+        <span class="claim-tag">{{ t('privacy.claim.2.tag') }}</span>
+        <h3>{{ t('privacy.claim.2.title') }}</h3>
+        <p>{{ t('privacy.claim.2.body') }}</p>
+      </article>
+      <article class="claim claim--warn">
+        <span class="claim-tag">{{ t('privacy.claim.3.tag') }}</span>
+        <h3>{{ t('privacy.claim.3.title') }}</h3>
+        <p>{{ t('privacy.claim.3.body') }}</p>
+      </article>
+    </div>
+
+    <h2>{{ t('privacy.data.title') }}</h2>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>{{ t('privacy.data.col1') }}</th>
+          <th>{{ t('privacy.data.col2') }}</th>
+          <th>{{ t('privacy.data.col3') }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for i in range(1, 7) %}
+        <tr>
+          <td>{{ t('privacy.data.' ~ i ~ '.a') }}</td>
+          <td>{{ t('privacy.data.' ~ i ~ '.b') }}</td>
+          <td>{{ t('privacy.data.' ~ i ~ '.c') }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h2>{{ t('privacy.third.title') }}</h2>
+    <p>{{ t('privacy.third.body') }}</p>
+    <p>{{ t('privacy.third.note') }}</p>
+
+    <h2>{{ t('privacy.never.title') }}</h2>
+    <ul class="cross-list cross-list--compact">
+      {% for i in range(1, 7) %}<li>{{ t('privacy.never.' ~ i) }}</li>{% endfor %}
+    </ul>
+
+    <h2>{{ t('privacy.limits.title') }}</h2>
+    <ul class="notice-list notice-list--prose">
+      {% for i in range(1, 7) %}<li>{{ t('privacy.limits.' ~ i) }}</li>{% endfor %}
+    </ul>
+
+    <p class="fine">{{ t('privacy.fine') }}</p>
+  </div>
+</section>
+{% endblock %}

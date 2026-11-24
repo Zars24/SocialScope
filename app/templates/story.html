@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% import "macros.html" as m %}
+
+{% block title %}{{ t('page.title.story') }}{% endblock %}
+{% block description %}{{ t('page.desc.story') }}{% endblock %}
+
+{% block content %}
+<section class="hero hero--compact">
+  <div class="shell hero-grid">
+    <div class="hero-copy">
+      <p class="eyebrow" data-reveal><span class="eyebrow-dot" aria-hidden="true"></span>{{ t('storypage.kicker') }}</p>
+      <h1 class="hero-title" data-hero-title>
+        <span class="hero-line"><span class="hero-line-inner" data-hero-line>{{ t('storypage.title') }}</span></span>
+        <span class="hero-line hero-line--accent"><span class="hero-line-inner" data-hero-line>{{ t('storypage.title.accent') }}</span></span>
+      </h1>
+      <p class="lede" data-reveal>{{ t('storypage.lede') }}</p>
+      <ul class="hero-facts" data-reveal>
+        <li>{{ t('storypage.fact1') }}</li>
+        <li>{{ t('storypage.fact2') }}</li>
+        <li>{{ t('storypage.fact3') }}</li>
+      </ul>
+    </div>
+
+    <div class="console" data-reveal>
+      <div class="console-head">
+        <span class="console-kicker">{{ t('storypage.console.kicker') }}</span>
+        <span class="console-status"><span class="status-dot" aria-hidden="true"></span>{{ t('storypage.console.status') }}</span>
+      </div>
+      {{ m.analyzer_form('/story', raw_url, error, t, id_prefix='story', help_key='form.help.story') }}
+      <p class="console-note">{{ t('storypage.console.note') }} <a href="/privacy">{{ t('storypage.console.link') }}</a>.</p>
+    </div>
+  </div>
+</section>
+
+{% if result %}
+  {% include "partials/result.html" %}
+{% endif %}
+
+<section class="section section--tinted">
+  <div class="shell">
+    <div class="section-head" data-reveal>
+      <p class="kicker">{{ t('storypage.status.kicker') }}</p>
+      <h2>{{ t('storypage.status.title') }}</h2>
+      <p class="section-sub">{{ t('storypage.status.sub') }}</p>
+    </div>
+
+    <div class="cap-cards" data-stagger>
+      {% for card in story_cards %}
+      <article class="cap-card cap-card--wide">
+        <header class="cap-card-head">
+          <div>
+            <span class="platform-tag">{{ card.label }}</span>
+            <h3>{{ t('story.card.title') }}</h3>
+          </div>
+          {{ m.status_pill(card.capability, t) }}
+        </header>
+        <p class="cap-explain">{{ t(card.capability.explanation) }}</p>
+        <dl class="meta-list">
+          <div><dt>{{ t('meta.status') }}</dt><dd>{{ t('meta.available') if card.configured else t('meta.inactive') }}</dd></div>
+          <div><dt>{{ t('meta.mode') }}</dt><dd>{{ t('mode.structured') }}</dd></div>
+          <div><dt>{{ t('meta.media') }}</dt><dd>{{ t('meta.browser') }}</dd></div>
+        </dl>
+        <p class="fine">{{ t(card.note) }}</p>
+      </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell two-col">
+    <div data-reveal>
+      <p class="kicker">{{ t('storypage.show.kicker') }}</p>
+      <h2>{{ t('storypage.show.title') }}</h2>
+      <ul class="check-list">
+        <li>{{ t('storypage.show.1') }}</li>
+        <li>{{ t('storypage.show.2') }}</li>
+        <li>{{ t('storypage.show.3') }}</li>
+        <li>{{ t('storypage.show.4') }}</li>
+      </ul>
+    </div>
+    <div data-reveal>
+      <p class="kicker">{{ t('storypage.never.kicker') }}</p>
+      <h2>{{ t('storypage.never.title') }}</h2>
+      <ul class="cross-list">
+        <li>{{ t('storypage.never.1') }}</li>
+        <li>{{ t('storypage.never.2') }}</li>
+        <li>{{ t('storypage.never.3') }}</li>
+        <li>{{ t('storypage.never.4') }}</li>
+        <li>{{ t('storypage.never.5') }}</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section privacy-band">
+  <div class="shell privacy-band-inner" data-reveal>
+    <div>
+      <p class="kicker">{{ t('storypage.privacy.kicker') }}</p>
+      <h2>{{ t('storypage.privacy.title') }}</h2>
+      <p>{{ t('storypage.privacy.body') }}</p>
+    </div>
+    <a class="btn btn--ghost" href="/privacy">{{ t('storypage.privacy.cta') }}</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,88 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+/build/
+/dist/
+
+# Virtual environments
+.venv/
+/venv/
+/env/
+
+# Test and tool caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Environment variables and local secrets
+.env
+.env.*
+*.env
+!.env.example
+.envrc
+.netrc
+.pypirc
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+*.p8
+*.ppk
+*.jks
+*.keystore
+secrets.json
+secrets.yaml
+secrets.yml
+secrets.toml
+secrets.env
+opencode.json
+.opencode/
+.aws/
+.ssh/
+
+# Local data, logs, and backups
+*.log
+/logs/
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.tmp
+*.temp
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+*.zip
+*.7z
+*.tar
+*.tar.gz
+*.rar
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Internal project documentation
+AGENTS.md
+DESIGN_GUIDELINES.md
+IMPLEMENTATION_PLAN.md
+PROJECT_SPEC.md
+TECHNICAL_DECISIONS.md
+
+# Internal research documentation
+docs/FEASIBILITY_RESEARCH.md
+docs/INSTAGRAM_PROVIDER_VALIDATION.md
+docs/PRODUCT_FLOW_AND_PRIVACY.md
+docs/STORY_VIEWER_DEEP_RESEARCH.md
+docs/STORY_VIEWER_FEASIBILITY.md
